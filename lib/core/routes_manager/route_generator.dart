@@ -3,6 +3,7 @@ import 'package:ecommerce_app/core/routes_manager/routes.dart';
 import 'package:ecommerce_app/features/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../features/auth/register/register_screen.dart';
 import '../resources/constants_manager.dart';
 
 class RouteGenerator {
@@ -10,6 +11,8 @@ class RouteGenerator {
     switch (settings.name) {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case Routes.registerRoute:
+        return MaterialPageRoute(builder: (_) => RegisterScreen());
 
       default:
         return unDefinedRoute();
