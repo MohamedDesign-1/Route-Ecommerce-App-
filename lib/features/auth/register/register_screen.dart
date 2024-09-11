@@ -12,10 +12,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/resources/font_manager.dart';
+import '../../../core/routes_manager/routes.dart';
 import '../../../core/widgets/custom_button.dart';
+import '../../../core/widgets/custom_password_filed.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterViewModelCubit viewModel = getIt<RegisterViewModelCubit>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,121 +37,132 @@ class RegisterScreen extends StatelessWidget {
           width: double.infinity,
           height: double.infinity,
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: AppSize.s88.h,),
-                Image.asset(ImageAssets.logo),
-                SizedBox(height: AppSize.s32.h,),
-                Text(
-                  'Full Name',
-                  style: getMediumStyle(
-                    fontSize: FontSizeManager.s20.sp,
-                    color: ColorManager.white,
+            child: Form(
+              key: viewModel.formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: AppSize.s88.h,),
+                  Image.asset(ImageAssets.logo),
+                  SizedBox(height: AppSize.s32.h,),
+                  Text(
+                    'Full Name',
+                    style: getMediumStyle(
+                      fontSize: FontSizeManager.s20.sp,
+                      color: ColorManager.white,
+                    ),
                   ),
-                ),
-                SizedBox(height: AppSize.s8.h,),
-                CustomTextFiled(
-                  validator: AppValidators.validateName,
-                  controller: viewModel.nameController,
-                  hintText: 'Enter your full name',
-                  borderRadius: BorderRadius.circular(AppSize.s4),
-                ),
-                SizedBox(height: AppSize.s16.h,),
-                Text(
-                  'Mobile Number',
-                  style: getMediumStyle(
-                    fontSize: FontSizeManager.s20.sp,
-                    color: ColorManager.white,
+                  SizedBox(height: AppSize.s8.h,),
+                  CustomTextFiled(
+                    validator: AppValidators.validateName,
+                    keyboardType: TextInputType.name,
+                    suffixIcon: const Icon(Icons.person , color: ColorManager.primary,),
+                    controller: viewModel.nameController,
+                    hintText: 'Enter your full name',
+                    borderRadius: BorderRadius.circular(AppSize.s4),
                   ),
-                ),
-                SizedBox(
-                  height: AppSize.s8.h,
-                ),
-                CustomTextFiled(
-                  validator: AppValidators.validatePhoneNumber,
-                  controller: viewModel.phoneController,
-                  hintText: 'Enter your phone number',
-                  borderRadius: BorderRadius.circular(AppSize.s4),
-                ),
-                SizedBox(
-                  height: AppSize.s16.h,
-                ),
-                Text(
-                  'Email Address',
-                  style: getMediumStyle(
-                    fontSize: FontSizeManager.s20.sp,
-                    color: ColorManager.white,
+                  SizedBox(height: AppSize.s16.h,),
+                  Text(
+                    'Mobile Number',
+                    style: getMediumStyle(
+                      fontSize: FontSizeManager.s20.sp,
+                      color: ColorManager.white,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: AppSize.s8.h,
-                ),
-                CustomTextFiled(
-                  validator: AppValidators.validateEmail,
-                  controller: viewModel.emailController,
-                  hintText: 'Enter your email address',
-                  borderRadius: BorderRadius.circular(AppSize.s4),
-                ),
-                SizedBox(
-                  height: AppSize.s16.h,
-                ),
-                Text(
-                  'Password',
-                  style: getMediumStyle(
-                    fontSize: FontSizeManager.s20.sp,
-                    color: ColorManager.white,
+                  SizedBox(
+                    height: AppSize.s8.h,
                   ),
-                ),
-                SizedBox(
-                  height: AppSize.s8.h,
-                ),
-                CustomTextFiled(
-                  obscureText: true,
-                  validator: AppValidators.validatePassword,
-                  controller: viewModel.passwordController,
-                  hintText: 'Enter your password',
-                  borderRadius: BorderRadius.circular(AppSize.s4),
-                ),
-                SizedBox(
-                  height: AppSize.s16.h,
-                ),
-                Text(
-                  'Re-enter Password',
-                  style: getMediumStyle(
-                    fontSize: FontSizeManager.s20.sp,
-                    color: ColorManager.white,
+                  CustomTextFiled(
+                    validator: AppValidators.validatePhoneNumber,
+                    controller: viewModel.phoneController,
+                    keyboardType: TextInputType.phone,
+                    suffixIcon: const Icon(Icons.call , color: ColorManager.primary,),
+                    hintText: 'Enter your phone number',
+                    borderRadius: BorderRadius.circular(AppSize.s4),
                   ),
-                ),
-                SizedBox(
-                  height: AppSize.s8.h,
-                ),
-                CustomTextFiled(
-                  obscureText: true,
-                  validator: AppValidators.validatePassword,
-                  controller: viewModel.confirmPasswordController,
-                  hintText: 'Re-enter your password',
-                  borderRadius: BorderRadius.circular(AppSize.s4),
-                ),
-                SizedBox(
-                  height: AppSize.s24.h,
-                ),
-                BlocBuilder<RegisterViewModelCubit, RegisterViewModelState>(
-                  bloc: viewModel,
-                  builder: (context, state) {
-                    return CustomButton(
-                        textName: AppConstants.signUp,
-                        buttonColor: ColorManager.white,
-                        textColor: ColorManager.primary,
-                        isLoading: state is RegisterViewModelLoading,
-                        isSuccess: state is RegisterViewModelSuccess,
-                        onPressed: () {
-                          viewModel.register();
-                        }
-                    );
-                  },
-                ),
-              ],
+                  SizedBox(
+                    height: AppSize.s16.h,
+                  ),
+                  Text(
+                    'Email Address',
+                    style: getMediumStyle(
+                      fontSize: FontSizeManager.s20.sp,
+                      color: ColorManager.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: AppSize.s8.h,
+                  ),
+                  CustomTextFiled(
+                    validator: AppValidators.validateEmail,
+                    controller: viewModel.emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    suffixIcon: const Icon(Icons.email , color: ColorManager.primary,),
+                    hintText: 'Enter your email address',
+                    borderRadius: BorderRadius.circular(AppSize.s4),
+                  ),
+                  SizedBox(
+                    height: AppSize.s16.h,
+                  ),
+                  Text(
+                    'Password',
+                    style: getMediumStyle(
+                      fontSize: FontSizeManager.s20.sp,
+                      color: ColorManager.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: AppSize.s8.h,
+                  ),
+                  CustomPasswordFiled(
+                    obscureText: true,
+                    validator: AppValidators.validatePassword,
+                    controller: viewModel.passwordController,
+                    hintText: 'Enter your password',
+                    borderRadius: BorderRadius.circular(AppSize.s4),
+                  ),
+                  SizedBox(
+                    height: AppSize.s16.h,
+                  ),
+                  Text(
+                    'Re-enter Password',
+                    style: getMediumStyle(
+                      fontSize: FontSizeManager.s20.sp,
+                      color: ColorManager.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: AppSize.s8.h,
+                  ),
+                  CustomPasswordFiled(
+                    obscureText: true,
+                    validator: AppValidators.validatePassword,
+                    controller: viewModel.confirmPasswordController,
+                    hintText: 'Re-enter your password',
+                    borderRadius: BorderRadius.circular(AppSize.s4),
+                  ),
+                  SizedBox(
+                    height: AppSize.s24.h,
+                  ),
+                  BlocBuilder<RegisterViewModelCubit, RegisterViewModelState>(
+                    bloc: viewModel,
+                    builder: (context, state) {
+                      return SpinnerButton(
+                          actionText: 'Register Successfully',
+                          textName: AppConstants.signUp,
+                          buttonColor: ColorManager.white,
+                          textColor: ColorManager.primary,
+                          isLoading: state is RegisterViewModelLoading,
+                          isSuccess: state is RegisterViewModelSuccess,
+                          onPressed: () {
+                            viewModel.onRegisterButtonPressed();
+                            Navigator.pushReplacementNamed(context, Routes.loginRoute);
+                          }
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

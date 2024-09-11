@@ -18,6 +18,8 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
   var phoneController = TextEditingController(text: '01000000000');
   var passwordController = TextEditingController(text: '12345678');
   var confirmPasswordController = TextEditingController(text: '12345678');
+  var formKey = GlobalKey<FormState>();
+
 
   void register() async {
     emit(RegisterViewModelLoading());
@@ -28,5 +30,13 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
     }, (registerResponseEntity) {
       emit(RegisterViewModelSuccess(registerResponseEntity));
     });
+  }
+
+  void onRegisterButtonPressed() {
+    if (formKey.currentState?.validate() ?? false) {
+      register();
+    } else {
+      emit(RegisterViewModelError(ServerError(errorMessage: 'Please enter valid data')));
+    }
   }
 }

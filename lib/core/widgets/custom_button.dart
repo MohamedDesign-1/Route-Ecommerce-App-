@@ -5,37 +5,75 @@ import '../resources/font_manager.dart';
 import '../resources/styles_manager.dart';
 import '../resources/values_manager.dart';
 
-class CustomButton extends StatelessWidget {
+class SpinnerButton extends StatefulWidget {
   final bool isLoading;
   final bool isSuccess;
   final String textName;
+  final String actionText;
   final Function()? onPressed;
   final Color textColor;
-  final Color? buttonColor;
+  final Color buttonColor;
+  final Duration successDuration;
 
-  const CustomButton({
+  const SpinnerButton({
     super.key,
+    required this.actionText,
     required this.textName,
     required this.textColor,
     required this.isLoading,
     required this.isSuccess,
     this.onPressed,
-    this.buttonColor,
+    this.buttonColor = Colors.blue,
+    this.successDuration = const Duration(seconds: 2),
   });
+
+  @override
+  _SpinnerButtonState createState() => _SpinnerButtonState();
+}
+
+class _SpinnerButtonState extends State<SpinnerButton> {
+  bool showSuccess = false;
+  Color? currentButtonColor;
+
+  @override
+  void initState() {
+    super.initState();
+    currentButtonColor = widget.buttonColor;
+  }
+
+  @override
+  void didUpdateWidget(covariant SpinnerButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isSuccess && !oldWidget.isSuccess) {
+      setState(() {
+        showSuccess = true;
+        currentButtonColor = Colors.green;
+      });
+
+      Future.delayed(widget.successDuration, () {
+        if (mounted) {
+          setState(() {
+            showSuccess = false;
+            currentButtonColor = widget.buttonColor;
+          });
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: isLoading ? null : onPressed,
+      onTap: widget.isLoading ? null : widget.onPressed,
       child: Container(
         width: double.infinity,
         height: AppSize.s64.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppSize.s4),
-          color: buttonColor,
+          color: currentButtonColor,
         ),
         child: Center(
-          child: isLoading
+          child: widget.isLoading
               ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -43,32 +81,37 @@ class CustomButton extends StatelessWidget {
                 color: ColorManager.primary,
               ),
               SizedBox(width: AppSize.s8.w),
-              Text('Loading...',
+              Text(
+                'Loading...',
                 style: getBoldStyle(
                   fontSize: FontSizeManager.s20.sp,
-                  color: textColor,
-                ),
-              ),
-            ],
-          ) : isSuccess ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.check_circle,
-                color: ColorManager.green,
-              ),
-              SizedBox(width:  AppSize.s8.w),
-              Text('Register Successfully',
-                style: getBoldStyle(
-                  fontSize: FontSizeManager.s20.sp,
-                  color: textColor,
+                  color: widget.textColor,
                 ),
               ),
             ],
           )
-              : Text(textName,
+              : showSuccess
+              ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.check_circle,
+                color: Colors.white,
+              ),
+              SizedBox(width: AppSize.s8.w),
+              Text(
+                widget.actionText,
+                style: getBoldStyle(
+                  fontSize: FontSizeManager.s20.sp,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          )
+              : Text(
+            widget.textName,
             style: getBoldStyle(
               fontSize: FontSizeManager.s20.sp,
-              color: textColor,
+              color: widget.textColor,
             ),
           ),
         ),
