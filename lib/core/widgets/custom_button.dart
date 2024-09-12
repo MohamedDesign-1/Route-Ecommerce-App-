@@ -13,6 +13,7 @@ class SpinnerButton extends StatefulWidget {
   final Function()? onPressed;
   final Color textColor;
   final Color buttonColor;
+  final double width;
   final Duration successDuration;
 
   const SpinnerButton({
@@ -22,6 +23,7 @@ class SpinnerButton extends StatefulWidget {
     required this.textColor,
     required this.isLoading,
     required this.isSuccess,
+    required this.width,
     this.onPressed,
     this.buttonColor = Colors.blue,
     this.successDuration = const Duration(seconds: 2),
@@ -66,7 +68,7 @@ class _SpinnerButtonState extends State<SpinnerButton> {
     return InkWell(
       onTap: widget.isLoading ? null : widget.onPressed,
       child: Container(
-        width: double.infinity,
+        width: widget.width,
         height: AppSize.s64.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppSize.s4),

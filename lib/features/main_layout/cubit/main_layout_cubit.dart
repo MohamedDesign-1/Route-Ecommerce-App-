@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 import '../favourite_tab/fav_tab.dart';
 import '../home_tab/home_tab.dart';
-import '../products_tab/product_tap.dart';
+import '../products_tab/product_tab.dart';
 import '../profile_tab/profile_tab.dart';
 
 part 'main_layout_state.dart';
@@ -15,7 +15,7 @@ class HomeViewModel extends Cubit<HomeState> {
   int currentIndex = 0;
   List<Widget> tabs = [
     HomeTab(),
-    ProductTap(),
+    ProductTab(),
     FavTab(),
     ProfileTab(),
   ];

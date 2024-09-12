@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:badges/badges.dart' as badges;
-import '../resources/assets_manager.dart';
-import '../resources/color_mananger.dart';
-import '../resources/font_manager.dart';
-import '../resources/styles_manager.dart';
-import '../resources/values_manager.dart';
+import '../../../../core/resources/assets_manager.dart';
+import '../../../../core/resources/color_mananger.dart';
+import '../../../../core/resources/font_manager.dart';
+import '../../../../core/resources/styles_manager.dart';
+import '../../../../core/resources/values_manager.dart';
 
 class CustomAppbar extends StatelessWidget {
   const CustomAppbar({Key? key}) : super(key: key);

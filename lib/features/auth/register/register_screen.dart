@@ -148,6 +148,7 @@ class RegisterScreen extends StatelessWidget {
                     bloc: viewModel,
                     builder: (context, state) {
                       return SpinnerButton(
+                          width: double.infinity,
                           actionText: 'Register Successfully',
                           textName: AppConstants.signUp,
                           buttonColor: ColorManager.white,

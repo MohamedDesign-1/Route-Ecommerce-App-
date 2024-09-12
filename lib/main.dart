@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:ecommerce_app/features/main_layout/products_tab/cubit/product_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,22 +15,25 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefUtils.init();
   var token = SharedPrefUtils.getDate(key: 'token');
-  String route ;
-  if(token != null) {
+  String route;
+  if (token != null) {
     route = Routes.mainLayoutRoute;
   } else {
     route = Routes.loginRoute;
-
   }
   Bloc.observer = MyBlocObserver();
   configureDependencies();
-  runApp(BlocProvider(
-      create: (context) => getIt<HomeTabViewModelCubit>()..getAllBrands()..getAllCategories(),
-      child: EcommerceApp(route:route,)));
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(create: (context) => getIt<HomeTabViewModelCubit>()..getAllBrands()..getAllCategories()),
+      BlocProvider(create: (context) => getIt<ProductViewModel>()),
+    ],
+    child: EcommerceApp(route:route,)));
 }
 
 class EcommerceApp extends StatelessWidget {
-  String route ;
+  final String route;
+
   EcommerceApp({Key? key, required this.route}) : super(key: key);
 
   @override
@@ -38,12 +42,13 @@ class EcommerceApp extends StatelessWidget {
       designSize: const Size(430, 932),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (context, child) => MaterialApp(
-        home: child,
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: route,
-      ),
+      builder: (context, child) =>
+          MaterialApp(
+            home: child,
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: RouteGenerator.getRoute,
+            initialRoute: route,
+          ),
     );
   }
 }

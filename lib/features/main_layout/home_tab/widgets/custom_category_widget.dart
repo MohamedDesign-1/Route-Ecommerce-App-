@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerce_app/core/resources/assets_manager.dart';
 import 'package:ecommerce_app/core/resources/constants_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/domain/entities/CategoryOrBrandResponseEnitity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../resources/color_mananger.dart';
-import '../resources/font_manager.dart';
-import '../resources/styles_manager.dart';
+import '../../../../core/resources/color_mananger.dart';
+import '../../../../core/resources/font_manager.dart';
+import '../../../../core/resources/styles_manager.dart';
 
 class CustomCategoryWidget extends StatelessWidget {
   CategoryOrBrandEntity list;

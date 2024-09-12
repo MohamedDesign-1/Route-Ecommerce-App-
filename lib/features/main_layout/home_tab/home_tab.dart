@@ -1,11 +1,10 @@
-import 'package:ecommerce_app/core/widgets/ads_widget.dart';
-import 'package:ecommerce_app/core/widgets/custom_section.dart';
+import 'package:ecommerce_app/features/main_layout/home_tab/widgets/ads_widget.dart';
 import 'package:ecommerce_app/features/main_layout/home_tab/cubit/home_tab_view_model_cubit.dart';
+import 'package:ecommerce_app/features/main_layout/home_tab/widgets/custom_category_widget.dart';
+import 'package:ecommerce_app/features/main_layout/home_tab/widgets/custom_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../core/widgets/custom_category_widget.dart';
 
 class HomeTab extends StatelessWidget {
 

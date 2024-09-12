@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/resources/values_manager.dart';
-import '../../core/widgets/custom_appbar.dart';
+import 'home_tab/widgets/custom_appbar.dart';
 
 class MainLayout extends StatelessWidget {
 

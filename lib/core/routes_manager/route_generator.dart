@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../features/auth/login/login_screen.dart';
 import '../../features/auth/register/register_screen.dart';
 import '../../features/main_layout/main_layout.dart';
+import '../../features/main_layout/products_tab/product_detials.dart';
 import '../resources/constants_manager.dart';
 
 class RouteGenerator {
@@ -19,6 +20,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.mainLayoutRoute:
         return MaterialPageRoute(builder: (_) => MainLayout());
+      case Routes.productDetailsRoute:
+        return MaterialPageRoute(builder: (_) => ProductDetials());
       default:
         return unDefinedRoute();
     }

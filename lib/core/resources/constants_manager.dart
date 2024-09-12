@@ -11,5 +11,7 @@ class AppConstants {
   static const String registerSuccess = 'Register Successfully';
   static const String login = 'Login';
   static const String loginSuccess = 'Login Successfully';
+  static const String addedToCart = 'Added To Cart Successfully';
+  static const String addToCart = 'Add To Cart';
 
 }

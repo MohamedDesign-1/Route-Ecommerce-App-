@@ -103,7 +103,8 @@ class LoginScreen extends StatelessWidget {
                     bloc: loginViewModelCubit,
                     builder: (context, state) {
                       return SpinnerButton(
-                        actionText: 'Login Successful',
+                        width: double.infinity,
+                        actionText: AppConstants.loginSuccess,
                         textName: AppConstants.login,
                         buttonColor: ColorManager.white,
                         textColor: ColorManager.primary,
