@@ -10,13 +10,15 @@ import '../../../../core/resources/constants_manager.dart';
 import '../../../../core/resources/font_manager.dart';
 import '../../../../core/resources/styles_manager.dart';
 import '../../../../core/resources/values_manager.dart';
+import '../cubit/product_view_model.dart';
 
 class CustomProductItem extends StatelessWidget {
   ProductEntity product;
+
   CustomProductItem({Key? key, required this.product}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    // var args = ModalRoute.of(context)!.settings.arguments as ProductEntity;
     return Container(
       padding: EdgeInsets.all(AppPadding.p8),
       decoration: BoxDecoration(
@@ -29,14 +31,18 @@ class CustomProductItem extends StatelessWidget {
           Stack(
             children: [
               Container(
-                height: 150.h,
+                height: 125.h,
                 width: double.infinity.w,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.r),
-                    ),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
                 child: CachedNetworkImage(
-                  imageUrl: product.imageCover ?? AppConstants.imageUrl, fit: BoxFit.cover,
-                  placeholder: (context, url) => const Center(child: CircularProgressIndicator( color: ColorManager.primary,)),
+                  imageUrl: product.imageCover ?? AppConstants.imageUrl,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(
+                    color: ColorManager.primary,
+                  )),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
@@ -48,7 +54,9 @@ class CustomProductItem extends StatelessWidget {
                       bgColor: ColorManager.white,
                       icon: Icons.favorite_border,
                       iconSize: 16,
-                      onPressed: () {})),
+                      onPressed: () {
+                        ProductViewModel.get(context).addToWishList(product.id!);
+                      })),
             ],
           ),
           SizedBox(
@@ -60,10 +68,12 @@ class CustomProductItem extends StatelessWidget {
                 color: ColorManager.black, fontSize: FontSizeManager.s16.sp),
           ),
           Text(
-            ShortTextUtils.truncateDescription(product.description ?? 'Product', 30),
+            ShortTextUtils.truncateDescription(
+                product.description ?? 'Product', 30),
             style: getMediumStyle(
                 color: ColorManager.black, fontSize: FontSizeManager.s14.sp),
           ),
+          Spacer(),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,15 +81,17 @@ class CustomProductItem extends StatelessWidget {
                 Text(
                   '${product.price} EGP',
                   style: getBoldStyle(
-                      color: ColorManager.black, fontSize: FontSizeManager.s16.sp),
+                      color: ColorManager.black,
+                      fontSize: FontSizeManager.s16.sp),
                 ),
-
                 CustomIconBtn(
-                  iconSize: 16.h ,
+                  iconSize: 16.h,
                   color: ColorManager.white,
                   bgColor: ColorManager.primary,
                   icon: Icons.add,
-                  onPressed: () {},
+                  onPressed: () {
+                    ProductViewModel.get(context).addToCart(product.id!);
+                  },
                 )
               ],
             ),

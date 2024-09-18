@@ -30,10 +30,10 @@ class AttributeWidget extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: getBoldStyle(color: ColorManager.black , fontSize: FontSizeManager.s16),
+                style: getBoldStyle(color: ColorManager.black , fontSize: FontSizeManager.s16.sp),
                 textAlign: TextAlign.center,
               ),
-              if (icon != null) // عرض الأيقونة فقط إذا كانت غير null
+              if (icon != null)
                 Icon(icon, color: ColorManager.primary),
             ],
           ),

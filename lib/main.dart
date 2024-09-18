@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:ecommerce_app/features/cart/cubit/cart_view_model_cubit.dart';
+import 'package:ecommerce_app/features/main_layout/favourite_tab/cubit/wishlist_cubit.dart';
 import 'package:ecommerce_app/features/main_layout/products_tab/cubit/product_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +29,8 @@ void main() async {
     providers: [
       BlocProvider(create: (context) => getIt<HomeTabViewModelCubit>()..getAllBrands()..getAllCategories()),
       BlocProvider(create: (context) => getIt<ProductViewModel>()),
+      BlocProvider(create: (context) => getIt<CartViewModelCubit>()),
+      BlocProvider(create: (context) => getIt<WishlistCubit>()),
     ],
     child: EcommerceApp(route:route,)));
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ecommerce_app/features/auth/login/cubit/login_view_model_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +15,7 @@ import '../../../core/routes_manager/routes.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/custom_password_filed.dart';
 import '../../../core/widgets/custom_text_filed.dart';
-import '../../../core/widgets/shared_pref_utils.dart';
+import '../../../core/widgets/toast_utils.dart';
 import '../../../core/widgets/validators.dart';
 import '../../../domain/di/di.dart';
 
@@ -26,8 +28,13 @@ class LoginScreen extends StatelessWidget {
       bloc: loginViewModelCubit,
       listener: (context, state) {
         if (state is LoginViewModelError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.failure.errorMessage),));
+          ToastUtils.showErrorToast(AppConstants.error, context, state.failure.errorMessage);
+        }  else if (state is LoginViewModelSuccess) {
+          // Start Timer after success is emitted
+          Timer(const Duration(seconds: 2), () {
+            Navigator.pushReplacementNamed(context, Routes.mainLayoutRoute);
+            }
+          );
         }
       },
       child: Scaffold(
@@ -42,13 +49,17 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: AppSize.s88.h,),
+                  SizedBox(
+                    height: AppSize.s88.h,
+                  ),
                   Image.asset(ImageAssets.logo),
-                  SizedBox(height: AppSize.s32.h,),
+                  SizedBox(
+                    height: AppSize.s32.h,
+                  ),
                   Text(
                     'Welcome Back To Route',
                     style: getMediumStyle(
-                      fontSize: FontSizeManager.s20.sp,
+                      fontSize: FontSizeManager.s24.sp,
                       color: ColorManager.white,
                     ),
                   ),
@@ -69,7 +80,10 @@ class LoginScreen extends StatelessWidget {
                     controller: loginViewModelCubit.emailController,
                     validator: AppValidators.validateEmail,
                     keyboardType: TextInputType.emailAddress,
-                    suffixIcon: const Icon(Icons.email , color: ColorManager.primary,),
+                    suffixIcon: const Icon(
+                      Icons.email,
+                      color: ColorManager.primary,
+                    ),
                     hintText: 'Enter your email address',
                     borderRadius: BorderRadius.circular(AppSize.s4),
                   ),
@@ -96,8 +110,15 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: AppSize.s16.h,
                   ),
+                  Text(
+                    'Forgot password',
+                    style: getMediumStyle(
+                        color: ColorManager.white,
+                        fontSize: FontSizeManager.s16.sp),
+                    textAlign: TextAlign.right,
+                  ),
                   SizedBox(
-                    height: AppSize.s24.h,
+                    height: AppSize.s32.h,
                   ),
                   BlocBuilder<LoginViewModelCubit, LoginViewModelState>(
                     bloc: loginViewModelCubit,
@@ -112,10 +133,37 @@ class LoginScreen extends StatelessWidget {
                         isSuccess: state is LoginViewModelSuccess,
                         onPressed: () {
                           loginViewModelCubit.onLoginButtonPressed();
-                          Navigator.pushReplacementNamed(context, Routes.mainLayoutRoute);
                         },
                       );
                     },
+                  ),
+                  SizedBox(
+                    height: AppSize.s32.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Don’t have an account?',
+                        style: getMediumStyle(
+                            color: ColorManager.white,
+                            fontSize: FontSizeManager.s16.sp),
+                      ),
+                      SizedBox(
+                        width: AppSize.s8.w,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.registerRoute);
+                        },
+                        child: Text(
+                          'Create Account',
+                          style: getBoldStyle(
+                              color: ColorManager.white,
+                              fontSize: FontSizeManager.s16.sp),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

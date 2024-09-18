@@ -33,7 +33,7 @@ class RegisterViewModelCubit extends Cubit<RegisterViewModelState> {
   }
 
   void onRegisterButtonPressed() {
-    if (formKey.currentState?.validate() ?? false) {
+    if (formKey.currentState!.validate()) {
       register();
     } else {
       emit(RegisterViewModelError(ServerError(errorMessage: 'Please enter valid data')));

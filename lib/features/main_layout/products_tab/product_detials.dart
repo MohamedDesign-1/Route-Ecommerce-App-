@@ -1,32 +1,36 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerce_app/core/routes_manager/routes.dart';
 import 'package:ecommerce_app/core/widgets/custom_button.dart';
+import 'package:ecommerce_app/core/widgets/short_text_utils.dart';
+import 'package:ecommerce_app/features/main_layout/products_tab/cubit/product_view_model.dart';
 import 'package:ecommerce_app/features/main_layout/products_tab/widgets/attribute_widget.dart';
 import 'package:ecommerce_app/features/main_layout/products_tab/widgets/cutsom_title_and_price.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:read_more_text/read_more_text.dart';
+import 'package:readmore/readmore.dart';
 
 import '../../../core/resources/color_mananger.dart';
 import '../../../core/resources/constants_manager.dart';
 import '../../../core/resources/font_manager.dart';
 import '../../../core/resources/styles_manager.dart';
 import '../../../core/resources/values_manager.dart';
+import '../../../domain/entities/product_response_entity.dart';
 
 class ProductDetials extends StatelessWidget {
-  const ProductDetials({Key? key}) : super(key: key);
-
+  final ProductEntity productEntity;
+  ProductDetials({Key? key, required this.productEntity }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocBuilder<ProductViewModel, ProductState>(
+      builder: (context, state) {
+        return Scaffold(
         appBar: AppBar(
           title: const Text('Product Details'),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: ColorManager.primary),
             onPressed: () {
-              Navigator.pop(context, Routes.mainLayoutRoute);
+              Navigator.pop(context);
             },
           ),
           actions: [
@@ -35,16 +39,11 @@ class ProductDetials extends StatelessWidget {
                   const Icon(Icons.shopping_cart, color: ColorManager.primary),
               onPressed: () {},
             ),
-            IconButton(
-              icon: const Icon(Icons.share, color: ColorManager.primary),
-              onPressed: () {},
-            ),
           ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child:
-          Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
             Container(
@@ -53,7 +52,7 @@ class ProductDetials extends StatelessWidget {
                 border: Border.all(color: ColorManager.primary),
               ),
               child: CachedNetworkImage(
-                imageUrl: AppConstants.imageUrl,
+                imageUrl: productEntity.imageCover ?? AppConstants.imageUrl,
                 fit: BoxFit.cover,
                 height: 300,
                 width: double.infinity,
@@ -67,13 +66,15 @@ class ProductDetials extends StatelessWidget {
             SizedBox(
               height: AppSize.s16.h,
             ),
-            CutsomTitleAndPrice(title: 'Nike Air Jordon', price: '2000'),
+            CutsomTitleAndPrice(title: ShortTextUtils.truncateText(productEntity.title!, 30), price: '${productEntity.price!}'),
             SizedBox(
               height: AppSize.s16.h,
             ),
-            Row(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
               AttributeWidget(
-                title: '3000 Sold',
+                title: 'Sold: ${productEntity.sold}',
                 width: 120,
                 color: ColorManager.primary,
               ),
@@ -81,24 +82,29 @@ class ProductDetials extends StatelessWidget {
                 width: AppSize.s8.w,
               ),
               AttributeWidget(
-                title: '4.8 (2000)',
+                title: 'Rates: ${productEntity.ratingsAverage}',
                 icon: Icons.star,
                 width: 120,
                 color: Colors.transparent,
               ),
-            ]),
+                ]),
             SizedBox(
               height: AppSize.s16.h,
             ),
               Text(
               'Description',
               style: getBoldStyle(
-                  color: ColorManager.black, fontSize: FontSizeManager.s18),
+                  color: ColorManager.black, fontSize: FontSizeManager.s20.sp),
             ),
               SizedBox(
                 height: AppSize.s8.h,
               ),
-              Text('Product Description', style: getBoldStyle(color: ColorManager.black , fontSize: FontSizeManager.s18),),
+              ReadMoreText(
+                productEntity.description!,
+                trimLines: 2,
+                trimExpandedText: 'Read more',
+                trimCollapsedText: 'Read less',
+                style: getMediumStyle(color: ColorManager.black , fontSize: FontSizeManager.s18.sp),),
               const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,25 +113,28 @@ class ProductDetials extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                     Text('Total Price', style: getMediumStyle(color: ColorManager.primary.withOpacity(0.5) , fontSize: FontSizeManager.s18),),
-                    Text(' EGP 2000', style: getBoldStyle(color: ColorManager.black, fontSize: FontSizeManager.s18),),
+                    Text('${productEntity.price!} EGP', style: getBoldStyle(color: ColorManager.black, fontSize: FontSizeManager.s18),),
                     ],
                   ),
                   SpinnerButton(
-                    onPressed: () {},
                     width: 310.w,
                     actionText: AppConstants.addedToCart,
                     textName: AppConstants.addToCart,
                     textColor: ColorManager.white,
                     buttonColor: ColorManager.primary,
-                    isLoading: false,
-                    isSuccess: false,
+                    isLoading: state is AddToCartLoadingState,
+                    isSuccess: state is AddToCartSuccessState,
+                    onPressed: () {
+                      ProductViewModel.get(context).addToCart(productEntity.id!);
+                    },
                   )
                 ]
               ),
-
             ]
           ),
         )
     );
+  },
+);
   }
 }

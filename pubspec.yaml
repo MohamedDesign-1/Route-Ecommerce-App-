@@ -50,7 +50,8 @@ dependencies:
   crystal_navigation_bar: ^1.0.0
   cached_network_image: ^3.4.1
   shared_preferences: ^2.3.2
-  read_more_text: ^0.0.5
+  readmore: ^3.0.0
+  toastification: ^2.2.0
 
 dev_dependencies:
   flutter_test:

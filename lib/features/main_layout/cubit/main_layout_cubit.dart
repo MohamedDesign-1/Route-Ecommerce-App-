@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import '../favourite_tab/fav_tab.dart';
+import '../favourite_tab/wish_list.dart';
 import '../home_tab/home_tab.dart';
 import '../products_tab/product_tab.dart';
 import '../profile_tab/profile_tab.dart';
@@ -16,7 +16,7 @@ class HomeViewModel extends Cubit<HomeState> {
   List<Widget> tabs = [
     HomeTab(),
     ProductTab(),
-    FavTab(),
+    WishList(),
     ProfileTab(),
   ];
 

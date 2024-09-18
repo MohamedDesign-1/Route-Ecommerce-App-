@@ -33,7 +33,7 @@ class LoginViewModelCubit extends Cubit<LoginViewModelState> {
 
 
   void onLoginButtonPressed() {
-    if (formKey.currentState?.validate() ?? false) {
+    if (formKey.currentState!.validate()) {
       login();
     } else {
       emit(LoginViewModelError(ServerError(errorMessage: 'Please enter valid data')));

@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:ecommerce_app/core/resources/assets_manager.dart';
 import 'package:ecommerce_app/core/resources/color_mananger.dart';
 import 'package:ecommerce_app/core/resources/constants_manager.dart';
 import 'package:ecommerce_app/core/resources/styles_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/core/widgets/custom_text_filed.dart';
+import 'package:ecommerce_app/core/widgets/toast_utils.dart';
 import 'package:ecommerce_app/core/widgets/validators.dart';
 import 'package:ecommerce_app/domain/di/di.dart';
 import 'package:ecommerce_app/features/auth/register/cubit/register_view_model_cubit.dart';
@@ -26,8 +29,7 @@ class RegisterScreen extends StatelessWidget {
       bloc: viewModel,
       listener: (context, state) {
         if (state is RegisterViewModelError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.failure.errorMessage),));
+        ToastUtils.showErrorToast(AppConstants.error, context, state.failure.errorMessage);
         }
       },
       child: Scaffold(
@@ -149,7 +151,7 @@ class RegisterScreen extends StatelessWidget {
                     builder: (context, state) {
                       return SpinnerButton(
                           width: double.infinity,
-                          actionText: 'Register Successfully',
+                          actionText: AppConstants.registerSuccess,
                           textName: AppConstants.signUp,
                           buttonColor: ColorManager.white,
                           textColor: ColorManager.primary,
@@ -157,7 +159,11 @@ class RegisterScreen extends StatelessWidget {
                           isSuccess: state is RegisterViewModelSuccess,
                           onPressed: () {
                             viewModel.onRegisterButtonPressed();
-                            Navigator.pushReplacementNamed(context, Routes.loginRoute);
+                            Timer(const Duration(seconds: 3), () {
+                              if (state is RegisterViewModelSuccess || viewModel.formKey.currentState!.validate()) {
+                                Navigator.pushReplacementNamed(context, Routes.loginRoute);
+                              }
+                            });
                           }
                       );
                     },
